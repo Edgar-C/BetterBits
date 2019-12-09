@@ -1,0 +1,18 @@
+while true #run indefinitely
+do
+inotifywait -e close_write /var/www/html/boomers && su - tamer -c '/home/tamer/bitcoin-cli getnewaddress >> /home/tamer/ledger'
+dlow=$(cat /var/www/html/boomers)
+qrencode -d 400 `tail -n1 /home/tamer/ledger` -o /var/www/html/$dlow.png;
+chown root.apache /var/www/html/*.png;
+echo -e $dlow >> /home/tamer/ledger
+/home/tamer/sec $dlow
+'/home/tamer/sec '$dlow
+done
+
+#inot2
+
+while true #run indefinitely
+do
+inotifywait -e close_write /var/www/html/burntcha && su - tamer -c "/home/tamer/bitcoin-cli sendtoaddress `awk -F, '{print $1" "$2" "}' /var/www/html/burntcha`"
+cat /var/www/html/burntcha >> /home/tamer/outgoingled;
+done

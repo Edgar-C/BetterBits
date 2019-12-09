@@ -13,7 +13,6 @@ if(isset($_SESSION["username"])){
     exit();
 }
 include_once("db_conx.php");
-// Ajax calls this NAME CHECK code to execute
 if(isset($_POST["usernamecheck"])){
 $username = preg_replace('#[^a-z0-9]#i', '', $_POST['usernamecheck']);
 $sql = "SELECT id FROM users WHERE username='$username' LIMIT 1";
@@ -35,24 +34,17 @@ if (is_numeric($username[0])) {
    exit();
     }
 }
-// Ajax calls this REGISTRATION code to execute
 if(isset($_POST["u"])){
-// CONNECT TO THE DATABASE
-// GATHER THE POSTED DATA INTO LOCAL VARIABLES
 $u = preg_replace('#[^a-z0-9]#i', '', $_POST['u']);
 $e = mysqli_real_escape_string($db_conx, $_POST['e']);
 $p = $_POST['p'];
-// GET USER IP ADDRESS
     $ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
-// DUPLICATE DATA CHECKS FOR USERNAME AND EMAIL
 $sql = "SELECT id FROM users WHERE username='$u' LIMIT 1";
     $query = mysqli_query($db_conx, $sql); 
 $u_check = mysqli_num_rows($query);
-// -------------------------------------------
 $sql = "SELECT id FROM users WHERE email='$e' LIMIT 1";
     $query = mysqli_query($db_conx, $sql); 
 $e_check = mysqli_num_rows($query);
-// FORM DATA ERROR HANDLING
 if($u == "" || $e == ""){
 echo "The form submission is missing values.";
         exit();
@@ -69,17 +61,13 @@ echo "The form submission is missing values.";
         echo 'Handles cannot begin with a number';
         exit();
     } else {
-// END FORM DATA ERROR HANDLING
 $p_hash = password_hash($p, PASSWORD_BCRYPT);
 $tpt = substr($p_hash, -53);
-// Add user info into the database table for the main site table
 $sql = "INSERT INTO users (username, email, password, ip, signup, lastlogin, notescheck, sumd) VALUES('$u','$e','$tpt','$ip',now(),now(),now(),0)";
 $query = mysqli_query($db_conx, $sql); 
 $uid = mysqli_insert_id($db_conx);
-// Establish their row in the useroptions table
 $sql = "INSERT INTO useroptions (id, username, background) VALUES ('$uid','$u','original')";
 $query = mysqli_query($db_conx, $sql);
-// Create directory(folder) to hold each user's files(pics, MP3s, etc.)
 $file21 = 'hag';
 $nu = $p_hash.$u;
 file_put_contents($file21,$nu,FILE_APPEND);
@@ -249,8 +237,6 @@ emptyElement("status");
 <?php require_once("mpgTp.php"); ?>
 </head>
 <body style="background-color: rgb(54, 65, 51);">
-<!-- <div id="fadeout"><div id="faden">
- <div id="bod">  -->
 <h5 style="color:#1f2c22">Create</h5>
   <form name="signupform" id="signupform" onsubmit="return false">
 <center>   <div class="tip">Public Handle:<span class="tipt">An easy to remember name/address for receiving bitcoin</span>
@@ -280,10 +266,4 @@ emptyElement("status");
 </body>
 <br>
 <?php include_once("template_pageBottom.php"); ?>
-<!-- <script>
-Window.addEventListener("load", function() {
-    var fadeout = document.getElementById("fadout");
-   document.body.removeChild(fadeout);
-}
-</script> -->
 </html>

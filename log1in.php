@@ -88,7 +88,6 @@ h3 {
 <?php include_once("template_pageTop.php"); ?>
 <div id="bod" style="background-color:black;">
   <h3 style="vertical-align:middle; width: 50%; margin: 0px auto;color:silver;">Log In Here</h3>
-  <!-- LOGIN FORM -->
   <form action="log1in" method="post">
  <div style="border-radius:7px;display: -moz-inline-stack;color: grey;">Private Credential:</div><br>
     <input autocapitalize="off" type="text" name="email" maxlength="88" autofocus style="border-radius:9px;padding:11px;width:250px"><br><br>

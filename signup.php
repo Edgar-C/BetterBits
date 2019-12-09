@@ -1,6 +1,5 @@
 <?php
 if(strstr($_SERVER['HTTP_USER_AGENT'],'iPhone') || strstr($_SERVER['HTTP_USER_AGENT'],'Android'))
-#if(strstr($_SERVER['HTTP_USER_AGENT'],'Android'))
 {
   header('Location: msignup');
 exit();
@@ -41,24 +40,17 @@ if (is_numeric($public[0])) {
    exit();
     }
 }
-// Ajax calls this REGISTRATION code to execute
 if(isset($_POST["u"])){
-// CONNECT TO THE DATABASE
-// GATHER THE POSTED DATA INTO LOCAL VARIABLES
 $u = preg_replace('#[^a-z0-9]#i', '', $_POST['u']);
 $e = mysqli_real_escape_string($db_conx, $_POST['e']);
 $p = $_POST['p'];
-// GET USER IP ADDRESS
     $ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
-// DUPLICATE DATA CHECKS FOR USERNAME AND EMAIL
 $sql = "SELECT id FROM users WHERE username='$u' LIMIT 1";
     $query = mysqli_query($db_conx, $sql); 
 $u_check = mysqli_num_rows($query);
-// -------------------------------------------
 $sql = "SELECT id FROM users WHERE email='$e' LIMIT 1";
     $query = mysqli_query($db_conx, $sql); 
 $e_check = mysqli_num_rows($query);
-// FORM DATA ERROR HANDLING
 if($u == "" || $e == ""){
 echo "missing values.";
         exit();
@@ -75,20 +67,16 @@ echo "missing values.";
         echo 'Handles cannot begin with a number';
         exit();
     } else {
-// END FORM DATA ERROR HANDLING
 $p_hash = password_hash($p, PASSWORD_BCRYPT);
 $tpt = substr($p_hash, -53);
-// Add user info into the database table for the main site table
 $sql = "INSERT INTO users (username, email, password, ip, signup, lastlogin, notescheck, sumd) VALUES('$u','$e','$tpt','$ip',now(),now(),now(),0)";
 $query = mysqli_query($db_conx, $sql); 
 $uid = mysqli_insert_id($db_conx);
-// Establish their row in the useroptions table
 $sql = "INSERT INTO useroptions (id, username, background) VALUES ('$uid','$u','original')";
 $query = mysqli_query($db_conx, $sql);
-// Create directory(folder) to hold each user's files(pics, MP3s, etc.)
-$file21 = 'hag';
-$nu = $p_hash.$u;
-file_put_contents($file21,$nu,FILE_APPEND);
+#$file21 = 'hag';
+#$nu = $p_hash.$u;
+#file_put_contents($file21,$nu,FILE_APPEND);
 header("location: activation?e=".$e);
 exit();
 }

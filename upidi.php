@@ -1,23 +1,11 @@
 <?php
 session_start();
-#require("php_includes/check_login_status.php");
-#if($user_ok == false) {
-#header('location: login');
-#echo "broke";
-#exit();
-#}
-#require("timedoh.php");
 if($_POST["ass1"] === ""){
 header('location: login');
 }
 if(!$_POST["ass1"] == ""){
-	// CONNECT TO THE DATABASE
-//	include_once("db_conx.php");
-	// GATHER THE POSTED DATA INTO LOCAL VARIABLES AND SANITIZE
+ GATHER THE POSTED DATA INTO LOCAL VARIABLES AND SANITIZE
 	$nub = $_POST["ass1"];
-	// GET USER IP ADDRESS
-//    $ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
-	// FORM DATA ERROR HANDLING
 if($nub == ""){
 		echo "failed missing input";
         exit();
@@ -27,8 +15,6 @@ $p_hash = password_hash($nub, PASSWORD_BCRYPT);
 $tpt = substr($p_hash, -53);
 $qes = $_SESSION['username'];
 require("db_conx.php");
-// Add user info into the database table for the main site table
-//echo $tpt.$_SESSION['username'];
 $sql = "UPDATE users SET password='$tpt' WHERE username='$qes'";
 $query = mysqli_query($db_conx, $sql);
 echo "Updated successfully".$qes;

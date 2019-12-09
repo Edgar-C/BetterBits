@@ -1,0 +1,21 @@
+grep -A 1 "mations\": 3" /home/tamer/diafil |grep -v confi > /home/tamer/dookz
+shobi=$(awk '{print $2}' /home/tamer/dookz)
+for i in $shobi
+do
+sleep 1;
+didali=$(grep $i /home/tamer/toast)
+if [ $didali = $i ]; then
+exit;
+else
+echo $i >> /home/tamer/toast;
+shata=$(echo $i | grep -oE [0-9a-zA-Z]{64});
+dinkz=$(tail /home/tamer/tranziz|grep -B 2 $shata|tail -n3|head -n1);
+sta=$(echo $dinkz | grep -oE [0-9a-zA-Z]{34});
+slink=$(tail /home/tamer/tranziz|grep -B 1 $shata|tail -n2|head -n1);
+jio=$(echo $slink | grep -oE [0-9]\.[0-9]{4});
+pia=$(echo 'scale=5; '$jio' / 2'| bc);
+mysql -e "use usracc; update users set sumd = sumd + $jio where adder = '$sta'";
+echo "update "$jio >> /home/tamer/row;
+fi
+done
+exit;

@@ -17,21 +17,16 @@ if($user_ok == true){
 }
 ?>
 <?php
-// AJAX CALLS THIS LOGIN CODE TO EXECUTE
 if(isset($_POST["e"])){
 	// CONNECT TO THE DATABASE
 	include_once("php_includes/db_conx.php");
-	// GATHER THE POSTED DATA INTO LOCAL VARIABLES AND SANITIZE
 	$e = mysqli_real_escape_string($db_conx, $_POST['e']);
 	$p = ($_POST['p']);
-	// GET USER IP ADDRESS
-    $ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
-	// FORM DATA ERROR HANDLING
+	    $ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
 	if($e == "" || $p == ""){
 		echo "login_faild";
         exit();
 	} else {
-	// END FORM DATA ERROR HANDLING
 		$sql = "SELECT id, username, password, email FROM users WHERE email='$e' AND activated='1' LIMIT 1";
         $query = mysqli_query($db_conx, $sql);
         $row = mysqli_fetch_row($query);
@@ -42,16 +37,10 @@ if(isset($_POST["e"])){
 }		
 $xavior = '$2y$10$'.$db_pass_str;
 if(password_verify($p, $xavior)){
-//if(password_verify($p, $db_pass_str)){
-			// CREATE THEIR SESSIONS AND COOKIES
 			$_SESSION['userid'] = $db_id;
 			$_SESSION['username'] = $db_username;
 			$_SESSION['email'] = $db_email;
 			$_SESSION['password'] = $db_pass_str;
-//			setcookie("id", $db_id, strtotime( '+30 days' ), "/", "", "", TRUE);
-//			setcookie("user", $db_username, strtotime( '+30 days' ), "/", "", "", TRUE);
-//    		setcookie("pass", $db_pass_str, strtotime( '+30 days' ), "/", "", "", TRUE); 
-			// UPDATE THEIR "IP" AND "LASTLOGIN" FIELDS
 			$sql = "UPDATE users SET ip='$ip', lastlogin=now() WHERE username='$db_username' LIMIT 1";
             $query = mysqli_query($db_conx, $sql);
 			echo $db_username;
@@ -138,7 +127,6 @@ function login(){
 <body>
 <br> 
  <h1>Log In</h1>
-  <!-- LOGIN FORM -->
   <form id="loginform" onsubmit="return false;">
     <div>First Password:</div>
     <input type="text" id="email" onfocus="emptyElement('status')" maxlength="88" autofocus >

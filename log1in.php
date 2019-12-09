@@ -14,19 +14,14 @@ if($user_ok == true){
     exit();
 }
 if(isset($_POST["password"])){
-	// CONNECT TO THE DATABASE
 	include_once("db_conx.php");
-	// GATHER THE POSTED DATA INTO LOCAL VARIABLES AND SANITIZE
 	$e = mysqli_real_escape_string($db_conx, $_POST["email"]);
 	$p = ($_POST['password']);
-	// GET USER IP ADDRESS
     $ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
-	// FORM DATA ERROR HANDLING
 	if($e == "" || $p == ""){
 		echo "login failed missing input";
         exit();
 	} else {
-	// END FORM DATA ERROR HANDLING
 		$sql = "SELECT id, username, password, email FROM users WHERE email='$e' AND activated='1' LIMIT 1";
         $query = mysqli_query($db_conx, $sql);
         $row = mysqli_fetch_row($query);
@@ -37,7 +32,6 @@ if(isset($_POST["password"])){
 }		
 $xavior = '$2y$10$'.$db_pass_str;
 if(password_verify($p, $xavior)){
-			// CREATE THEIR SESSIONS AND COOKIES
 			$_SESSION['userid'] = $db_id;
 			$_SESSION['username'] = $db_username;
 			$_SESSION['password'] = $db_pass_str;
@@ -104,7 +98,6 @@ h3 {
     <button id="loginbtn" type='submit'>Log In</button> 
     <p id="status"></p>
   </form>
-  <!-- LOGIN FORM -->
 </div>
 <?php include_once("template_pageBottom.php"); ?>
 </body>

@@ -1,33 +1,26 @@
 <?php
-//require("timdedoh.php");
-//$ip1 = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
-#session_start();
 require("php_includes/check_login_status.php");
 if($user_ok == false) {
 header('location: lost');
 exit();
 }
 require("timedoh.php");
-// Initialize any variables that the page might echo
 $u = "";
 $userlevel = "";
 $joindate = "";
 $lastsession = "";
 $ip = "";
-// Make sure the _GET username is set, and sanitize it
 if(isset($_GET["u"])){
 $u = preg_replace('#[^a-z0-9]#i', '', $_GET['u']);
 } 
 require_once("db_conx.php");
 $sql = "SELECT * FROM users WHERE username='$u' AND activated='1' LIMIT 1";
 $user_query = mysqli_query($db_conx, $sql);
-// Now make sure that user exists in the table
 $numrows = mysqli_num_rows($user_query);
 if($numrows < 1){
 echo "username".$u." is not yet actived";
     exit();	
 }
-// Check to see if the viewer is the account owner
 $isOwner = "no";
 if($u == $log_username && $user_ok == true){
 $isOwner = "yes";
@@ -37,7 +30,6 @@ else
 echo "nah";
 exit;
 }
-// Fetch the user row from the query above
 while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
 $profile_id = $row["id"];
 $userlevel = $row["userlevel"];
@@ -47,20 +39,6 @@ $ip = $row["ip"];
 $adr = $row["adder"];
 $bcoin = $row["sumd"];
 }
-//if(is_null($bcoin)) {
-//$bcoin = 0;
-//}
-#$joindate = strftime("%b %d, %Y", strtotime($signup));
-#$lastsession = strftime("%b %d, %Y", strtotime($lastlogin));
-#$time1 = strtotime($lastlogin);
-//$killatime = ($time1 + 14445);
-#$nowt = time();
-//if($ip != $ip1) {
-//	session_unset();
-//	session_destroy();
-//header("location: login");
-//	exit;
-//}
 ?>
 <!DOCTYPE html>
 <html>
@@ -184,7 +162,6 @@ require("derder.php");
         <div class="content">
 <?php
 require_once("upidi.php");
-//include("snow7.php");
 ?>
         </div>
     </div>
@@ -197,6 +174,5 @@ require_once("upidi.php");
 </body>
 <?php 
 include_once("template_pageBottom.php");
-//include("snow.php");
 ?>
 </html>

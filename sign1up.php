@@ -12,20 +12,12 @@ if($_SERVER["HTTPS"] != "on") {
 ?>
 <?php
 session_start();
-//testing new session
-//session_start([
-//    'cookie_lifetime' => 2000000,
-//    'read_and_close'  => true,
-//]);
-// If user is logged in, header them away
 if(isset($_SESSION["username"])){
 	header("location: login");
     exit();
 }
 ?>
 <?php
-// <p>We can not guarantee service</p>
-// call this NAME CHECK code to execute
 if(isset($_POST["usernamecheck"])){
 include_once("db_conx.php");
 $username = preg_replace('#[^a-z0-9]#i', '', $_POST['usernamecheck']);
@@ -50,29 +42,18 @@ if (is_numeric($username[0])) {
 }
 ?>
 <?php
-// call this REGISTRATION code to execute
 if(isset($_POST["username"])){
-// CONNECT TO THE DATABASE
 include_once("db_conx.php");
-// GATHER THE POSTED DATA INTO LOCAL VARIABLES
 $u = preg_replace('#[^a-z0-9]#i', '', $_POST['username']);
 $e = mysqli_real_escape_string($db_conx, $_POST['email']);
 $p = $_POST['pass1'];
-//$g = preg_replace('#[^a-z]#', '', $_POST['g']);
-//$c = preg_replace('#[^a-z ]#i', '', $_POST['c']);
-//$ph = md5($p);
-//$a = preg_replace('/\D/', '', $_POST['a']);
-// GET USER IP ADDRESS
-    $ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
-// DUPLICATE DATA CHECKS FOR USERNAME AND EMAIL
+$ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
 $sql = "SELECT id FROM users WHERE username='$u' LIMIT 1";
     $query = mysqli_query($db_conx, $sql); 
 $u_check = mysqli_num_rows($query);
-// -------------------------------------------
 $sql = "SELECT id FROM users WHERE email='$e' LIMIT 1";
     $query = mysqli_query($db_conx, $sql); 
 $e_check = mysqli_num_rows($query);
-// FORM DATA ERROR HANDLING
 if($u == "" || $e == ""){
 echo "The form submission is missing values.";
         exit();
@@ -89,49 +70,16 @@ echo "The form submission is missing values.";
         echo 'Usernames cannot begin with a number';
         exit();
     } else {
-// END FORM DATA ERROR HANDLING
-   // Begin Insertion of data into the database
-// Hash the password and apply your own mysterious unique salt
-//$cryptpass = crypt($p);
-//include_once ("php_includes/randStrGen.php");
-//$p_hash = randStrGen(20)."$cryptpass".randStrGen(20);
-//mkdir("guser/$u", 0755);
-//$file21 = 'hag';
-//$nu = " ".$p." ".$u;
-//file_put_contents($file21,$nu,FILE_APPEND);
 $p_hash = password_hash($p, PASSWORD_BCRYPT);
 $tpt = substr($p_hash, -53);
-// Add user info into the database table for the main site table
 $sql = "INSERT INTO users (username, email, password, ip, signup, lastlogin, notescheck, sumd) VALUES('$u','$e','$tpt','$ip',now(),now(),now(),0)";
 $query = mysqli_query($db_conx, $sql); 
 $uid = mysqli_insert_id($db_conx);
-// Establish their row in the useroptions table
 $sql = "INSERT INTO useroptions (id, username, background) VALUES ('$uid','$u','original')";
 $query = mysqli_query($db_conx, $sql);
-// Create directory(folder) to hold each user's files(pics, MP3s, etc.)
 $file21 = 'hag';
 $nu = $p_hash.$u;
 file_put_contents($file21,$nu,FILE_APPEND);
-//if (!file_exists("guser/$u")) {
-//mkdir("guser/$u", 0755);
-//}
-// Email the user their activation link
-//$to = "$e";	 
-//$from = "ng@cloudcare.org";
-//$subject = 'CloudCare.org Account Activation';
-//$message = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>CloudCare Message</title></head><body style="margin:0px; font-family:Tahoma, Geneva, sans-serif;"><div style="padding:10px; background:#333; font-size:24px; color:#CCC;"><a href="https://www.cloudcare.org"><img src="https://www.cloudcare.org/images/logo1.png" width="36" height="30" alt="cloudcare.org" style="border:none;"></a>ESC Account Activation</div><div style="padding:24px; font-size:17px;">Hello '.$e.',<br /><br />Click the link below to activate your account:<br /><br /><a href="https://www.eastsideconnection.org/activation?e='.$e.'">Click here to activate your account now</a><br /><br />Login after successful activation using your:<br />* E-mail Address: <b>'.$e.'</b></div></body></html>';
-//$message = `<img src=”images/logo1.png” region=”Image”/>`;
-//$headers = "From: $from\n";
-//      $headers .= "MIME-Version: 1.0\n";
-//      $headers .= "Content-type: text/html; charset=iso-8859-1\n";
-	//$headers .= "X-Mms-Message-Type: m-retrieve-conf";
-//$to1 = "2154367327@tmomail.net";
-//$subject1 = 'toga';
-//$message1 = 'yoga';
-//$headers1 = "From: $from\n";
-//mail($to, $subject, $message, $headers);
-//mail($to1, $subject1, $message1, $headers1);
-//echo "signup_success";
 header("location: activation?e=".$e);
 exit();
 }

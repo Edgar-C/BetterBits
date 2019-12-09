@@ -1,0 +1,12 @@
+/home/tamer/bitcoin-cli listtransactions > /home/tamer/dookifreeze
+if diff -q /home/tamer/dookifreeze /home/tamer/dofire; then
+exit;
+else
+grep -C 4 receive dookifreeze|grep -A 7 address|grep -v -|grep -v address|grep -v block|grep -v vout|grep -v label|grep -v receive|grep -v amount >> /home/tamer/diafil;
+grep -C 1 receive /home/tamer/dookifreeze|grep -v receive|grep -A 1 address|tail -n 2 >> /home/tamer/tranziz;
+lil=$(grep -A 8 \"receive\" /home/tamer/dookifreeze|grep -v receive|grep txid|tail -n1)
+rlm=$(echo $lil|awk -F\" '{print $4}');
+echo $rlm >> /home/tamer/tranziz;
+bash /home/tamer/crow;
+cp /home/tamer/dookifreeze /home/tamer/dofire;
+fi

@@ -1,0 +1,3 @@
+# diafil needs to be rotated
+# run this as needed
+sleep 20;tail -n -100 /home/tamer/diafil > /home/tamer/bobo;sleep 5; cp /home/tamer/bobo /home/tamer/diafil;
